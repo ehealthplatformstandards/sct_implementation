@@ -1,0 +1,183 @@
+{
+  "id": "tsp5-version-consistency-mismatch",
+  "title": "Version consistency across eHR components",
+  "requirements": [
+    "TSP5"
+  ],
+  "started": "2026-09-23T06:40:06.491Z",
+  "finished": "2026-09-23T06:40:24.424Z",
+  "meta": {
+    "eHR": "http://localhost:3001",
+    "Production version (eHR)": "http://snomed.info/sct/11000172109/version/20260915",
+    "LTS proxy": "http://localhost:8090: active backend \"green\" (20260915)"
+  },
+  "summary": {
+    "pass": 11,
+    "fail": 6,
+    "warn": 0,
+    "info": 1
+  },
+  "ok": false,
+  "checks": [
+    {
+      "req": "TSP5",
+      "name": "Component \"search\" runs the production version",
+      "detail": "endpoint http://localhost:8090/fhir · version pinned in the component: 20260915",
+      "expected": "20260915",
+      "actual": "20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"validation\" runs the production version",
+      "detail": "endpoint http://localhost:8090/fhir · version pinned in the component: 20260915",
+      "expected": "20260915",
+      "actual": "20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"reporting\" runs the production version",
+      "detail": "endpoint http://localhost:8081/fhir · version pinned in the component: 20260915",
+      "expected": "20260915",
+      "actual": "20260715",
+      "status": "fail",
+      "request": "GET http://localhost:8081/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"fhir-export\" runs the production version",
+      "detail": "endpoint http://localhost:8090/fhir · version pinned in the component: 20260915",
+      "expected": "20260915",
+      "actual": "20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"release-impact\" runs the production version",
+      "detail": "endpoint http://localhost:8090/fhir · version pinned in the component: 20260915",
+      "expected": "20260915",
+      "actual": "20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Endpoint http://localhost:8090/fhir serves the production version (and only that version)",
+      "detail": "used by: search, validation, fhir-export, release-impact",
+      "expected": "20260915",
+      "actual": "20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "Endpoint http://localhost:8081/fhir serves the production version (and only that version)",
+      "detail": "used by: reporting",
+      "expected": "20260915",
+      "actual": "20260715",
+      "status": "fail",
+      "request": "GET http://localhost:8081/fhir/CodeSystem?url=http://snomed.info/sct"
+    },
+    {
+      "req": "TSP5",
+      "name": "LTS proxy: the active backend serves the production version",
+      "expected": "20260915",
+      "actual": "green: 20260915",
+      "status": "pass",
+      "request": "GET http://localhost:8090/admin/status"
+    },
+    {
+      "req": "TSP5",
+      "name": "LTS proxy: standby backend \"blue\" (kept for rollback)",
+      "detail": "used directly by: reporting",
+      "expected": "20260915",
+      "actual": "20260715",
+      "status": "fail"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"search\": search \"astma\" in the problem list (U01)",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "status": "pass",
+      "ms": 49,
+      "request": "GET http://localhost:3001/api/search?text=astma&careSet=problem&lang=nl-BE"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"validation\": validate 195967001 |Asthma| for the problem list (U04/S03)",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "status": "pass",
+      "ms": 29,
+      "request": "POST http://localhost:3001/api/validate"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"reporting\": report \"Patients with a disorder of the lung\" (S06)",
+      "detail": "The component detected that its terminology server answered with another version than the pinned production version and refused to process the data.",
+      "expected": "HTTP 200",
+      "actual": "HTTP 409 refused: ValueSet/$expand: terminology server used http://snomed.info/sct/11000172109/version/20260715 but the production version is http://snomed.info/sct/11000172109/version/20260915 (TSP5 version consistency).",
+      "status": "fail",
+      "ms": 9743,
+      "request": "GET http://localhost:3001/api/reports/lung"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"fhir-export\": FHIR export of patient pat-001 (I01)",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "status": "pass",
+      "ms": 22,
+      "request": "GET http://localhost:3001/api/patients/pat-001/fhir"
+    },
+    {
+      "req": "TSP5",
+      "name": "Component \"release-impact\" (S04)",
+      "detail": "not called by this check because it writes to the record; its endpoint and version are verified above",
+      "actual": "20260915",
+      "status": "info"
+    },
+    {
+      "req": "TSP5",
+      "name": "Versions stamped on stored entries (clinical_entry.sct_version)",
+      "detail": "Entries keep the version they were recorded with. Entries from an older version are not re-coded; the release impact analysis (S04) links them to their replacements.",
+      "expected": "Belgian Edition versions (module 11000172109)",
+      "actual": "20260715: 22 entries, 20260915: 1 entries",
+      "status": "pass"
+    },
+    {
+      "req": "TSP5",
+      "name": "Coding.version in the FHIR export of 3 patients (31 SNOMED CT codings)",
+      "detail": "FHIR Coding.version is \"the version of the code system which was used when choosing this code\", so a receiver can interpret each code in the right version.",
+      "expected": "every SNOMED CT coding carries its version",
+      "actual": "20260715: 29, 20260915: 2",
+      "status": "pass"
+    },
+    {
+      "req": "TSP5",
+      "name": "Stored concepts with the same status and FSN in 20260915 and 20260715",
+      "detail": "affected component(s): reporting on http://localhost:8081/fhir",
+      "expected": "25 of 25",
+      "actual": "21 of 25",
+      "status": "fail"
+    },
+    {
+      "req": "TSP5",
+      "name": "Analytics reports give the same result on 20260915 and 20260715",
+      "detail": "Each report (S06) is evaluated on the stored concepts with both versions.",
+      "expected": "7 of 7 identical",
+      "actual": "6 of 7 identical",
+      "status": "fail"
+    }
+  ],
+  "blocks": [
+    "Components running another version than production",
+    "Meaning of the stored concepts: 20260915 (production) vs 20260715 (reporting)",
+    "Analytics results: 20260915 vs 20260715"
+  ]
+}

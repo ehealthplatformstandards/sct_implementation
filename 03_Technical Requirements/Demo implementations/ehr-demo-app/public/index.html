@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SNOMED CT demo implementations</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <main>
+    <h1>SNOMED CT implementation · demo implementations</h1>
+    <p class="muted">Examples of how an eHR could meet the requirements of the <i>SNOMED CT Implementation - Requirements Specification</i> (V1.0). They show one possible approach, not the way it must be done.</p>
+    <div class="cards" id="cards"></div>
+    <section class="panel" id="version-panel" style="margin-top:16px"></section>
+    <section class="panel" id="coverage"></section>
+  </main>
+  <script type="module">
+    import { h, api, req, loadConfig, header, shortVersion, REQS } from '/js/common.js';
+    await loadConfig();
+    header('home');
+    document.getElementById('cards').replaceChildren(
+      h('div.card', h('h2', 'Demo 1 · Terminology services & release management'), h('p.small', 'Local terminology server (Snowstorm Lite) behind a blue/green proxy, and command-line checks with HTML reports: FHIR operations, ECL, release currency, controlled deployment, version consistency.'), h('div', req('TSP1', 'TSP2', 'TSP3', 'TSP4', 'TSP5', 'TSP6')), h('p', h('a', { href: '/demo1/index.html' }, 'Open the Demo 1 reports →'))),
+      h('div.card', h('h2', h('a', { href: '/search.html' }, 'Demo 2 · Search & select')), h('p.small', 'Data entry component: progressive search, variants, decompounding, typo tolerance, context subsets, Concept/Description ID, hierarchy browser, bindings, free text, favourites, text-analysis suggestions, NL/FR/DE/EN.'), h('div', req('U01', 'U02', 'U03', 'U04', 'U05', 'U06', 'U07', 'U08', 'TSP6', 'TSP7', 'S02', 'S03'))),
+      h('div.card', h('h2', h('a', { href: '/record.html' }, 'Demo 3 · Record, analytics & exchange')), h('p.small', 'Storage model, context fields, handling of inactivated concepts after a release upgrade, ECL-based reports, ICD-10 map rules, FHIR resources generated from the stored data.'), h('div', req('S01', 'S02', 'S04', 'S05', 'S06', 'I01', 'I02'))),
+    );
+    const v = await api('/api/version');
+    document.getElementById('version-panel').replaceChildren(
+      h('div.row', h('h2', { style: { margin: 0 } }, 'SNOMED CT version used by each eHR component'), req('TSP5')),
+      h('p.small', 'Production version: ', h('b.mono', v.productionVersion), ' - ', v.consistent ? h('span.status-ok', 'all components consistent') : h('span.status-bad', 'INCONSISTENT: components use different versions')),
+      h('table', h('tr', h('th', 'Component'), h('th', 'Terminology endpoint'), h('th', 'Pinned version'), h('th', 'Version served by the endpoint'), h('th', 'Status')),
+        v.components.map((c) => h('tr', h('td', c.component), h('td.mono', c.terminologyServer), h('td.mono', shortVersion(c.pinnedVersion)), h('td.mono', shortVersion(c.serverVersion) || c.error), h('td', c.consistent ? h('span.chip.ok', 'consistent') : h('span.chip.bad', 'mismatch'))))),
+      h('p.small.muted', 'Versions present in stored records: ', v.versionsInRecord.map((x) => `${shortVersion(x.version)} (${x.entries} entries)`).join(', ')));
+    const map = { TSP1: 'Demo 1 + request log in Demo 2/3', TSP2: 'Demo 1 + bindings/reports', TSP3: 'Demo 1', TSP4: 'Demo 1', TSP5: 'Demo 1 + this page', TSP6: 'Demo 2', TSP7: 'Demo 2 (+ queue in Demo 3)',
+      U01: 'Demo 2', U02: 'Demo 2', U03: 'Demo 2', U04: 'Demo 2', U05: 'Demo 2 + 3', U06: 'Demo 2 + 3', U07: 'Demo 2', U08: 'Demo 2', S01: 'Demo 3', S02: 'Demo 2 + 3', S03: 'Demo 2', S04: 'Demo 3 (after Demo 1 upgrade)', S05: 'Demo 3', S06: 'Demo 3', I01: 'Demo 3', I02: 'Demo 3' };
+    document.getElementById('coverage').replaceChildren(h('h2', 'Requirement coverage'),
+      h('table', h('tr', h('th', 'Requirement'), h('th', 'Summary'), h('th', 'Shown in')), Object.entries(REQS).map(([k, t]) => h('tr', h('td', h('b', k)), h('td', t), h('td', map[k])))));
+  </script>
+</body>
+</html>

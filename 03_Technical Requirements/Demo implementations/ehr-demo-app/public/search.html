@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo 2 · SNOMED CT search &amp; select</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <main>
+    <h1>Demo 2 · Structured data entry: search &amp; select</h1>
+    <div class="grid">
+      <div>
+        <section class="panel" id="patient-panel"></section>
+        <section class="panel" id="entry-panel">
+          <div class="tabs" id="caresets"></div>
+          <div id="binding-info" class="small muted"></div>
+          <div class="row" id="context-row" style="margin:8px 0"></div>
+          <div id="picker"></div>
+          <div id="selection" style="margin-top:12px"></div>
+        </section>
+        <section class="panel" id="nlp-panel"></section>
+      </div>
+      <div>
+        <section class="panel" id="details-panel"><h2>Concept details &amp; hierarchy</h2><p class="muted small">Click ⓘ next to a search result to browse its parents, children and defining relationships.</p></section>
+        <section class="panel" id="fav-panel"></section>
+        <section class="panel" id="timing-panel"></section>
+        <section class="panel" id="trace-panel"></section>
+      </div>
+    </div>
+  </main>
+  <dialog id="feedback-dialog"></dialog>
+  <script type="module" src="/js/search-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+{
+  "id": "tsp4-controlled-deployment",
+  "title": "Controlled deployment of a new Belgian Edition (blue/green)",
+  "requirements": [
+    "TSP4",
+    "TSP5"
+  ],
+  "started": "2026-09-22T09:58:46.664Z",
+  "finished": "2026-09-22T10:07:32.603Z",
+  "meta": {
+    "LTS proxy (endpoint used by the eHR)": "http://localhost:8090/fhir",
+    "Release package": "BE_20260915_snapshot.zip (1630 MB)",
+    "Target version": "http://snomed.info/sct/11000172109/version/20260915",
+    "Active before": "blue - http://snomed.info/sct/11000172109/version/20260715",
+    "Active after": "green - http://snomed.info/sct/11000172109/version/20260915",
+    "Rollback": "POST http://localhost:8090/admin/switch?to=blue (the previous instance keeps its index)"
+  },
+  "summary": {
+    "pass": 22,
+    "fail": 0,
+    "warn": 1,
+    "info": 1
+  },
+  "ok": true,
+  "checks": [
+    {
+      "req": "TSP4",
+      "name": "Standby instance is not the active one",
+      "expected": "active != green",
+      "actual": "active = blue",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Import into green via POST /fhir-admin/load-package",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Standby serves the new version",
+      "expected": "http://snomed.info/sct/11000172109/version/20260915",
+      "actual": "http://snomed.info/sct/11000172109/version/20260915",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Active concepts: RF2 vs terminology server",
+      "detail": "RF2 sct2_Concept_Snapshot active=1 vs $expand << 138875005 (total)",
+      "expected": 384162,
+      "actual": 384162,
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Concept status (sample of active concepts)",
+      "expected": "300/300",
+      "actual": "300/300",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Concept status (sample of inactive concepts)",
+      "expected": "100/100",
+      "actual": "100/100",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Fully specified names (sample)",
+      "expected": "300/300",
+      "actual": "300/300",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Active descriptions nl/fr/de/en of the sampled concepts are served",
+      "expected": "1524/1524",
+      "actual": "1524/1524",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4 TSP6",
+      "name": "Preferred term per language reference set (nl-BE, fr-BE, de-BE, GP, en-US)",
+      "expected": "874/874",
+      "actual": "874/874",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Inferred is-a relationships (parents of sampled concepts)",
+      "expected": "300/300",
+      "actual": "300/300",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Inferred defining attributes (normal form of sampled concepts)",
+      "expected": "300/300",
+      "actual": "300/300",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Stated relationships / OWL axioms",
+      "detail": "Not exposed by this terminology server (it serves the inferred form). A server that serves the stated form would be checked the same way.",
+      "expected": "served",
+      "actual": "not exposed by the server",
+      "status": "warn"
+    },
+    {
+      "req": "TSP4",
+      "name": "Reference set members (36 simple reference sets)",
+      "expected": "36 identical",
+      "actual": "36 identical",
+      "status": "pass"
+    },
+    {
+      "req": "S03",
+      "name": "Reference set members that reference inactive concepts",
+      "detail": "721000172106: 20; 40811000172108: 13; 100941000172101: 29; 130971000172101: 3; 100971000172106: 1; 130991000172100: 2; 100951000172104: 2",
+      "expected": "filtered out by the eHR at data entry",
+      "actual": "70 members",
+      "status": "info"
+    },
+    {
+      "req": "TSP4",
+      "name": "Historical associations (REPLACED BY, sample)",
+      "expected": "80/80",
+      "actual": "80/80",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4 S05",
+      "name": "ICD-10 extended map rows (sample)",
+      "expected": "60/60",
+      "actual": "60/60",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Search \"astma\" (nl-BE) on the standby instance",
+      "expected": "result",
+      "actual": "astma",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Search \"asthme\" (fr-BE) on the standby instance",
+      "expected": "result",
+      "actual": "asthme",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Search \"asthma\" (de-BE) on the standby instance",
+      "expected": "result",
+      "actual": "Asthma bronchiale",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Search \"asthma\" (en-US) on the standby instance",
+      "expected": "result",
+      "actual": "Asthma",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "$validate-code on a Belgian reference set",
+      "expected": true,
+      "actual": true,
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Atomic switch of the LTS proxy",
+      "expected": "blue -> green",
+      "actual": "blue -> green at 2026-09-22T10:07:28.513Z",
+      "status": "pass"
+    },
+    {
+      "req": "TSP5",
+      "name": "All eHR components use the new version",
+      "expected": "http://snomed.info/sct/11000172109/version/20260915",
+      "actual": "http://snomed.info/sct/11000172109/version/20260915 - consistent",
+      "status": "pass"
+    },
+    {
+      "req": "TSP4",
+      "name": "Terminology service availability during the procedure (probe via the LTS proxy)",
+      "detail": "1856 eHR-like requests over 526 s; served by blue: 1842, green: 14",
+      "expected": "0 failed requests",
+      "actual": "0 failed, p95 62 ms",
+      "status": "pass"
+    }
+  ],
+  "blocks": [
+    "Reference sets: RF2 package vs terminology server",
+    "Availability seen by the eHR during the deployment"
+  ]
+}

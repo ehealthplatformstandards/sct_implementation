@@ -1,0 +1,57 @@
+{
+  "id": "tsp3-release-currency-before-upgrade",
+  "title": "Belgian Edition release currency",
+  "requirements": [
+    "TSP3"
+  ],
+  "started": "2026-09-22T13:40:18.356Z",
+  "finished": "2026-09-22T13:40:18.497Z",
+  "meta": {
+    "Local terminology server": "http://localhost:8081/fhir",
+    "Production version": "http://snomed.info/sct/11000172109/version/20260715",
+    "Source of published versions": "release_package_information.json of 2 Belgian Edition package(s)",
+    "Published Belgian Edition versions known": "20260615, 20260715, 20260915",
+    "Note": "Run against the blue instance (http://localhost:8081), which served production before the upgrade to 20260915."
+  },
+  "summary": {
+    "pass": 1,
+    "fail": 1,
+    "warn": 0,
+    "info": 2
+  },
+  "ok": false,
+  "checks": [
+    {
+      "req": "TSP3",
+      "name": "Production edition is a Belgian Edition",
+      "expected": "module 11000172109",
+      "actual": "11000172109",
+      "status": "pass"
+    },
+    {
+      "req": "TSP3",
+      "name": "Months between the production version and the most recent published Belgian Edition",
+      "detail": "production 20260715 vs. most recent 20260915; newer releases not deployed: 20260915",
+      "expected": "<= 1 month",
+      "actual": "2 month(s)",
+      "status": "fail"
+    },
+    {
+      "req": "TSP3",
+      "name": "Published releases newer than the production version",
+      "detail": "Another reading of the requirement: at most one release behind. Not used for the result of this check.",
+      "actual": "1 (20260915)",
+      "status": "info"
+    },
+    {
+      "req": "TSP3",
+      "name": "Days since the effective time of the most recent release",
+      "detail": "How long the newest release has been available (effective time used as the publication date).",
+      "actual": "7 day(s) since 20260915",
+      "status": "info"
+    }
+  ],
+  "blocks": [
+    "Published Belgian Edition versions and the production version"
+  ]
+}

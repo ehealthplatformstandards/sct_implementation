@@ -1,0 +1,7 @@
+# never commit SNOMED CT release files, indexes or local state
+*.zip
+lucene-index/
+lts-proxy-state.json
+node_modules/
+__pycache__/
+*.pyc

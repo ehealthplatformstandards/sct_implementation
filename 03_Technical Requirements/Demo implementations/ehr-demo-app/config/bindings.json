@@ -1,0 +1,213 @@
+{
+  "_comment": [
+    "EXAMPLE terminology bindings for the demo (not normative).",
+    "Each Care Set data element is bound to a SNOMED CT concept set expressed as ECL (TSP2, U04).",
+    "Where a Belgian Edition reference set exists it is used directly (^ refsetId).",
+    "Where no national value set is published yet, the SNOMED CT part of the corresponding IPS 2.0.0 value set is used,",
+    "because the Patient Summary is the EHDS priority category. Replace these with the official national bindings",
+    "(Care Sets / Belgian FHIR profiles) when they are published.",
+    "strength: 'required' = only the binding may be used; 'extensible' = the context subset is preferred, and the",
+    "broader binding may be searched when the subset has no suitable concept (U01 context search)."
+  ],
+  "careSets": [
+    {
+      "id": "problem",
+      "label": "Problem list",
+      "dataElement": "Condition.code",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/core-clinical/StructureDefinition/be-problem",
+      "strength": "extensible",
+      "binding": {
+        "ecl": "< 404684003 |Clinical finding| OR < 243796009 |Situation with explicit context| OR < 272379006 |Event| OR << 160245001 |No current problems or disability|",
+        "source": "SNOMED CT part of IPS 2.0.0 ValueSet 'Problems - IPS' (problems-uv-ips)"
+      },
+      "contexts": [
+        {
+          "id": "be-problems",
+          "label": "Belgian problem list subset",
+          "refset": "40811000172108",
+          "default": true
+        },
+        {
+          "id": "be-gp",
+          "label": "Belgian GP subset (general practice)",
+          "refset": "721000172106"
+        },
+        {
+          "id": "cardio",
+          "label": "Cardiology subset",
+          "refset": "131001000172104"
+        },
+        {
+          "id": "pneumo",
+          "label": "Pulmonology subset",
+          "refset": "100961000172102"
+        },
+        {
+          "id": "nephro",
+          "label": "Nephrology subset",
+          "refset": "100951000172104"
+        },
+        {
+          "id": "rheuma",
+          "label": "Rheumatology subset",
+          "refset": "100981000172109"
+        },
+        {
+          "id": "hemato",
+          "label": "Hematology subset",
+          "refset": "130991000172100"
+        },
+        {
+          "id": "infect",
+          "label": "Infectious diseases subset",
+          "refset": "130981000172103"
+        },
+        {
+          "id": "icu",
+          "label": "Intensive care subset",
+          "refset": "130971000172101"
+        },
+        {
+          "id": "neonat",
+          "label": "Neonatology subset",
+          "refset": "100971000172106"
+        },
+        {
+          "id": "nursing",
+          "label": "Nursing subset",
+          "refset": "100941000172101"
+        }
+      ]
+    },
+    {
+      "id": "allergy",
+      "label": "Allergy & Intolerance",
+      "dataElement": "AllergyIntolerance.code",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/allergy/StructureDefinition/be-allergyintolerance",
+      "strength": "extensible",
+      "binding": {
+        "ecl": "< 105590001 |Substance| OR < 373873005 |Pharmaceutical / biologic product| OR < 420134006 |Propensity to adverse reaction| OR << 716186003 |No known allergy|",
+        "source": "SNOMED CT part of IPS 2.0.0 ValueSet 'Allergies & Intolerances - IPS' (allergies-intolerances-uv-ips)"
+      },
+      "contexts": [
+        {
+          "id": "be-allergy",
+          "label": "Belgian allergy causative agents (drug + non-drug) and 'no allergy'",
+          "ecl": "^ 50841000172109 OR ^ 50851000172106 OR ^ 181061000172105",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "allergy-manifestation",
+      "label": "Allergy reaction manifestation",
+      "dataElement": "AllergyIntolerance.reaction.manifestation",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/allergy/StructureDefinition/be-allergyintolerance",
+      "strength": "extensible",
+      "binding": {
+        "ecl": "< 404684003 |Clinical finding|",
+        "source": "demo choice (BE binding is extensible)"
+      },
+      "contexts": [
+        {
+          "id": "be-manifestation",
+          "label": "Belgian allergy manifestation subset",
+          "refset": "50861000172108",
+          "default": true
+        }
+      ],
+      "qualifier": true
+    },
+    {
+      "id": "vaccination",
+      "label": "Vaccination",
+      "dataElement": "Immunization.vaccineCode",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/vaccination/StructureDefinition/be-vaccination",
+      "strength": "required",
+      "binding": {
+        "ecl": "^ 50831000172102 |Belgian subset for Vaccination|",
+        "source": "Belgian Edition refset 50831000172102 (published for the be-vs-vaccine-code value set, a 'required' binding)"
+      },
+      "contexts": []
+    },
+    {
+      "id": "procedure",
+      "label": "Procedures",
+      "dataElement": "Procedure.code",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/core-clinical/StructureDefinition/be-procedure",
+      "strength": "extensible",
+      "binding": {
+        "ecl": "(< 71388002 |Procedure| OR << 787480003 |No known procedure|) MINUS (<< 14734007 |Administrative procedure| OR << 59524001 |Blood bank procedure| OR << 389067005 |Community health procedure| OR << 442006003 |Determination of information| OR << 225288009 |Environmental care procedure| OR << 308335008 |Patient encounter procedure| OR << 710135002 |Promotion of health| OR << 389084004 |Staff related procedure|)",
+        "source": "SNOMED CT part of IPS 2.0.0 ValueSet 'Procedures - IPS' (procedures-uv-ips)"
+      },
+      "contexts": [
+        {
+          "id": "be-problems-proc",
+          "label": "Procedures in the Belgian problem list subset",
+          "ecl": "^ 40811000172108 AND < 71388002 |Procedure|",
+          "default": true
+        },
+        {
+          "id": "be-gp-proc",
+          "label": "Procedures in the Belgian GP subset",
+          "ecl": "^ 721000172106 AND < 71388002 |Procedure|"
+        }
+      ]
+    },
+    {
+      "id": "observation",
+      "label": "Clinical observation",
+      "dataElement": "Observation.code",
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/core-clinical/StructureDefinition/be-clinical-observation",
+      "strength": "extensible",
+      "binding": {
+        "ecl": "< 363787002 |Observable entity|",
+        "source": "demo choice: SNOMED CT observable entities (LOINC remains the primary code system for many observations)"
+      },
+      "contexts": []
+    },
+    {
+      "id": "body-site",
+      "label": "Body site (qualifier)",
+      "dataElement": "*.bodySite",
+      "qualifier": true,
+      "fhirProfile": "https://www.ehealth.fgov.be/standards/fhir/core-clinical/StructureDefinition/be-problem",
+      "strength": "required",
+      "binding": {
+        "ecl": "<< 442083009 |Anatomical or acquired body structure|",
+        "source": "be-vs-bodysite (core-clinical placeholder value set)"
+      },
+      "contexts": [
+        {
+          "id": "be-body-location",
+          "label": "Belgian transversal subset for body location",
+          "refset": "211411000172101",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "qualifiers": {
+    "bodySite": {
+      "ecl": "<< 442083009 |Anatomical or acquired body structure|",
+      "source": "be-vs-bodysite (placeholder in core-clinical)",
+      "contextRefset": "211411000172101"
+    },
+    "laterality": {
+      "codes": [
+        "7771000",
+        "24028007",
+        "51440002"
+      ],
+      "source": "be-vs-laterality"
+    },
+    "severity": {
+      "codes": [
+        "24484000",
+        "6736007",
+        "255604002"
+      ],
+      "source": "be-vs-severity"
+    }
+  }
+}

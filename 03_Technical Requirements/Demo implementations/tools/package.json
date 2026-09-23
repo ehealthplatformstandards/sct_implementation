@@ -1,0 +1,7 @@
+{
+  "name": "sct-demo-tools",
+  "private": true,
+  "type": "module",
+  "description": "Developer tools for the SNOMED CT demo implementations (screenshots). Not needed to run the demos.",
+  "devDependencies": { "playwright": "^1.56.0" }
+}

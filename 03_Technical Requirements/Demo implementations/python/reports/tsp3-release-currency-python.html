@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Belgian Edition release currency</title>
+<style>
+body{font-family:"Segoe UI",system-ui,Arial,sans-serif;font-size:14px;color:#1f2933;background:#f5f6f8;margin:0}
+header{background:#1d4f91;color:#fff;padding:12px 22px}header h1{font-size:18px;margin:0}header .sub{opacity:.85;font-size:12.5px;margin-top:3px}
+.disc{background:#fff8d6;border-bottom:1px solid #efe1a0;color:#5c4b00;padding:6px 22px;font-size:12px}
+main{padding:16px 22px 40px;max-width:1500px;margin:0 auto}.panel{background:#fff;border:1px solid #dde2e8;border-radius:8px;padding:14px 16px;margin-bottom:16px}
+h2{font-size:15px;margin:0 0 10px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #eef1f4;vertical-align:top}
+th{background:#f7f8fa;color:#5f6b7a;font-size:12px}.num{text-align:right;white-space:nowrap}.d{color:#5f6b7a;font-size:12px;margin-top:2px}
+.rq{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:#3b4a5c;margin-top:3px;word-break:break-all}
+.st{font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px}.st.pass{background:#e5f4ec;color:#1e7b4a}.st.fail{background:#fdecea;color:#b3261e}.st.warn{background:#fff4e0;color:#9a5b00}.st.info{background:#e8eff9;color:#1d4f91}
+.kv{display:grid;grid-template-columns:230px 1fr;gap:4px 12px;font-size:13px}.kv div:nth-child(odd){color:#5f6b7a}.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+.badge{display:inline-block;font-size:11px;font-weight:700;color:#6b3fa0;background:#f1eafa;border:1px solid #d8c6ef;border-radius:4px;padding:0 5px;margin-right:4px}
+.big{font-size:22px;font-weight:700}.ok{color:#1e7b4a}.bad{color:#b3261e}.warnc{color:#9a5b00}
+pre{background:#0f1720;color:#d7e2ee;border-radius:6px;padding:10px 12px;font-size:12px;overflow:auto}
+</style></head><body>
+<header><h1>Belgian Edition release currency</h1><div class="sub"><span class="badge" style="background:#fff">TSP3</span> Demo 1 (Python) &middot; run 2026-09-23 07:24:32 UTC &middot; 0 s</div></header>
+<div class="disc">Example implementation for discussion - not a normative test suite. SNOMED CT content: SNOMED CT Belgian Edition, &copy; SNOMED International.</div>
+<main>
+<section class="panel"><div class="kv"><div>Terminology server</div><div class="mono">http://localhost:8090/fhir</div><div>Production version</div><div class="mono">http://snomed.info/sct/11000172109/version/20260915</div><div>Run with</div><div class="mono">Python 3.11.15</div><div>Source of published versions</div><div class="mono">manual (--latest)</div><div>Published Belgian Edition versions known</div><div class="mono">20260915</div><div>Note</div><div class="mono">The September 2026 Belgian Edition is in production; --latest was given by hand because this run had no upstream server.</div>
+<div>Result</div><div class="big ok">PASS <span style="font-size:13px;font-weight:400;color:#5f6b7a">2 pass &middot; 0 fail &middot; 0 warning &middot; 2 info</span></div></div>
+<p style="font-size:13px;color:#3b4a5c">Compares the SNOMED CT version used in production (read from the terminology server) with the most recent Belgian Edition published by the NRC. The requirement allows a lag of at most one month.</p></section>
+<section class="panel"><h2>Published Belgian Edition versions and the production version</h2><table><tr><th>Effective time</th><th>Status</th></tr><tr><td class="mono">20260915</td><td><b>in production</b></td></tr></table><p style="font-size:13px"><span class="ok"><b>Compliant.</b></span> The check can run daily from a scheduler (Windows Task Scheduler, cron); the exit code is non-zero when the production version is too old.</p></section>
+<section class="panel"><h2>Checks</h2><table><tr><th>Status</th><th>Req.</th><th>Check</th><th>Expected</th><th>Actual</th><th>Time</th></tr><tr class="pass"><td><span class="st pass">PASS</span></td><td>TSP3</td><td><b>Production edition is a Belgian Edition</b></td><td>module 11000172109</td><td>11000172109</td><td class="num"></td></tr>
+<tr class="pass"><td><span class="st pass">PASS</span></td><td>TSP3</td><td><b>Months between the production version and the most recent published Belgian Edition</b><div class="d">production 20260915 vs. most recent 20260915; newer releases not deployed: none</div></td><td>&lt;= 1 month</td><td>0 month(s)</td><td class="num"></td></tr>
+<tr class="info"><td><span class="st info">INFO</span></td><td>TSP3</td><td><b>Published releases newer than the production version</b><div class="d">Another reading of the requirement: at most one release behind. Not used for the result of this check.</div></td><td></td><td>0 (none)</td><td class="num"></td></tr>
+<tr class="info"><td><span class="st info">INFO</span></td><td>TSP3</td><td><b>Days since the effective time of the most recent release</b><div class="d">How long the newest release has been available (effective time used as the publication date).</div></td><td></td><td>8 day(s) since 20260915</td><td class="num"></td></tr></table></section>
+</main></body></html>
