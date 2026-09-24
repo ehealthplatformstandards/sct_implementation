@@ -1,3 +1,0 @@
-# local data: SQLite database and the lexicon cache (derived from licensed SNOMED CT content)
-data/
-node_modules/
